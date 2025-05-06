@@ -3,22 +3,27 @@ import { useCurrencyContext } from "../context/CurrencyContext";
 import { CircularProgress, Box, Typography } from "@mui/material";
 
 const LiveData = () => {
-  const { rates, loading, error } = useCurrencyContext();  // Access currency rates from context
-  const [currency, setCurrency] = useState("USD");  // Default currency
-  const [amount, setAmount] = useState(1);  // Default amount to convert
+  const { rates, loading, error } = useCurrencyContext();
+  const [currency, setCurrency] = useState("USD");
+  const [amount, setAmount] = useState(1);
   const [convertedAmount, setConvertedAmount] = useState(1);
 
-  // Handle currency conversion when the currency or amount changes
   useEffect(() => {
     if (rates[currency]) {
       setConvertedAmount(amount * rates[currency]);
     }
   }, [currency, amount, rates]);
 
-  // Render loading, error, or data
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -33,21 +38,37 @@ const LiveData = () => {
       <Typography variant="h4" gutterBottom>
         Live Currency Conversion
       </Typography>
-      
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
         <Typography variant="h6">Enter Amount (INR)</Typography>
-        <input 
-          type="number" 
-          value={amount} 
-          onChange={(e) => setAmount(e.target.value)} 
-          style={{ padding: "0.5rem", fontSize: "1rem", marginBottom: "1rem", width: "200px" }}
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          style={{
+            padding: "0.5rem",
+            fontSize: "1rem",
+            marginBottom: "1rem",
+            width: "200px",
+          }}
         />
-        
+
         <Typography variant="h6">Select Currency</Typography>
-        <select 
-          value={currency} 
-          onChange={(e) => setCurrency(e.target.value)} 
-          style={{ padding: "0.5rem", fontSize: "1rem", marginBottom: "1rem", width: "200px" }}
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          style={{
+            padding: "0.5rem",
+            fontSize: "1rem",
+            marginBottom: "1rem",
+            width: "200px",
+          }}
         >
           {Object.keys(rates).map((currencyKey) => (
             <option key={currencyKey} value={currencyKey}>

@@ -1,15 +1,10 @@
-// src/context/CurrencyContext.jsx
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-// Create the context
 const CurrencyContext = createContext();
-
-// Custom hook for using the context
 export const useCurrencyContext = () => useContext(CurrencyContext);
 
-// Provider component
 export const CurrencyProvider = ({ children }) => {
   const [rates, setRates] = useState({});
   const [loading, setLoading] = useState(true);

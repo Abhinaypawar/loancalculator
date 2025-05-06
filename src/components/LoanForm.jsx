@@ -1,5 +1,5 @@
-
 import React, { useState } from "react";
+import { TextField, Button, Grid, Box } from "@mui/material";
 
 const LoanForm = ({ onCalculate }) => {
   const [amount, setAmount] = useState("");
@@ -19,76 +19,53 @@ const LoanForm = ({ onCalculate }) => {
   };
 
   return (
-    <form
-            onSubmit={handleSubmit}
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              justifyContent: "space-between",
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Loan Amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              inputMode="numeric"
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                flex: "1 1 30%",
-                minWidth: "200px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Interest Rate (%)"
-              value={interest}
-              onChange={(e) => setInterest(e.target.value)}
-              inputMode="numeric"
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                flex: "1 1 30%",
-                minWidth: "200px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Term (Years)"
-              value={tenure}
-              onChange={(e) => setTenure(e.target.value)}
-              inputMode="numeric"
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                flex: "1 1 30%",
-                minWidth: "200px",
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                flex: "1 1 100%",
-                maxWidth: "200px",
-              }}
-            >
-              Calculate
-            </button>
-          </form>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={4}>
+          <TextField
+            fullWidth
+            label="Loan Amount"
+            variant="outlined"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TextField
+            fullWidth
+            label="Interest Rate (%)"
+            variant="outlined"
+            value={interest}
+            onChange={(e) => setInterest(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TextField
+            fullWidth
+            label="Term (Years)"
+            variant="outlined"
+            value={tenure}
+            onChange={(e) => setTenure(e.target.value)}
+          />
+        </Grid>
+      </Grid>
+
+      <Button
+        fullWidth
+        type="submit"
+        variant="contained"
+        sx={{
+          backgroundColor: "#007bff",
+          "&:hover": { backgroundColor: "#0056b3" },
+          fontSize: "16px",
+          py: 1.5,
+          width: "150px",
+          mt: 2,
+        }}
+      >
+        Calculate
+      </Button>
+    </Box>
   );
 };
 

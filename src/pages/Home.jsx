@@ -1,16 +1,25 @@
 import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  Button,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
 import LoanForm from "../components/LoanForm";
 import EmiBreakdownTable from "../components/EmiBreakdownTable";
 import AmortizationSchedule from "../components/AmortizationSchedule";
-import useExchangeRates from "../hooks/useExchangeRate"; // Custom hook to fetch exchange rates
+import useExchangeRates from "../hooks/useExchangeRate";
 
 const Home = () => {
   const { exchangeRates, loading, error } = useExchangeRates();
   const [currency, setCurrency] = useState("USD");
   const [emi, setEmi] = useState(null);
   const [schedule, setSchedule] = useState([]);
-  const [formData, setFormData] = useState(null); // Hold amount, interest, tenure
+  const [formData, setFormData] = useState(null);
 
   const calculateEmi = ({ amount, interest, tenure }) => {
     const monthlyRate = interest / 12 / 100;
@@ -49,72 +58,69 @@ const Home = () => {
   const conversionRate = exchangeRates?.[currency] || 1;
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Loan Calculator Dashboard</h2>
-
+    <Box sx={{ p: { xs: 2, md: 4 } }}>
+      <Typography variant="h4" gutterBottom>
+        Loan Calculator Dashboard
+      </Typography>
       <LoanForm onCalculate={calculateEmi} />
-
-      {loading && <p>Loading exchange rates...</p>}
-      {error && <p>{error}</p>}
-
+      {loading && <Typography>Loading exchange rates...</Typography>}
+      {error && <Typography color="error">{error}</Typography>}
       {emi !== null && formData && (
         <>
-          <div style={{ marginTop: "1rem" }}>
-            <h3>
+          <Box mt={3}>
+            <Typography variant="h6" gutterBottom>
               EMI in {currency}: {currency} {convertedEmi}
-            </h3>
-
-            <div
-              style={{
-                marginTop: "1rem",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+            </Typography>
+            <Box
+              mt={2}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              flexWrap="wrap"
+              gap={2}
             >
-              <div>
-                <select
+              <FormControl
+                sx={{
+                  width: "160px",
+                  flexShrink: 0,
+                }}
+                size="small"
+              >
+                <InputLabel>Currency</InputLabel>
+                <Select
                   value={currency}
+                  label="Currency"
                   onChange={(e) => setCurrency(e.target.value)}
-                  style={{
-                    padding: "15px",
-                    border: "1px solid #ccc",
-                    opacity: "0.7",
-                    flex: "1 1 100%",
-                    maxWidth: "200px",
-                  }}
                 >
                   {exchangeRates &&
                     Object.keys(exchangeRates).map((curr) => (
-                      <option key={curr} value={curr}>
+                      <MenuItem key={curr} value={curr}>
                         {curr}
-                      </option>
+                      </MenuItem>
                     ))}
-                </select>
-              </div>
-
-              <button
-                onClick={() => {
-                  setEmi(null);
-                  setFormData(null);
-                  setSchedule([]);
-                }}
-                style={{
-                  padding: "15px",
-                  border: "1px solid #ccc",
-                  
-                  color:"purple",
-                  opacity: "0.7",
-                  flex: "1 1 100%",
-                  maxWidth: "150px",
-                  cursor: "pointer",
-                }}
-              >
-                Reset Table
-              </button>
-            </div>
-          </div>
-
+                </Select>
+              </FormControl>
+              {/* Reset Button */}
+              <Box sx={{ ml: "auto" }}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{
+                    height: "40px",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}
+                  onClick={() => {
+                    setEmi(null);
+                    setFormData(null);
+                    setSchedule([]);
+                  }}
+                >
+                  Reset Table
+                </Button>
+              </Box>
+            </Box>
+          </Box>
           <AmortizationSchedule
             schedule={schedule}
             currency={currency}
@@ -122,7 +128,7 @@ const Home = () => {
           />
         </>
       )}
-    </div>
+    </Box>
   );
 };
 

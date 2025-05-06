@@ -28,7 +28,7 @@ const EmiCalculator = () => {
         <>
           <h2>Monthly EMI: ₹{emi}</h2>
           <h3>Loan Details</h3>
-          
+
           <EmiBreakdownTable
             principal={loanDetails.principal}
             rate={loanDetails.rate}

@@ -1,9 +1,7 @@
-// src/hooks/useExchangeRates.js
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Accessing the API key from the environment variables
 const API_KEY = import.meta.env.VITE_EXCHANGE_RATE_API_KEY;
 
 const useExchangeRates = () => {

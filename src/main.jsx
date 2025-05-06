@@ -7,7 +7,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Router> {/* Only wrap the app with Router here */}
+    <Router>
       <ThemeContextProvider>
         <CurrencyProvider>
           <App />
