@@ -1,11 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Button } from '@mui/material';
 
 const ErrorPage = () => {
+    const navigate = useNavigate();
+
+    const handleGoHome = () => {
+        navigate('/');
+    };
+
     return (
-        <div>
-            <h1>Error</h1>
-            <p>Sorry, the page you are looking for does not exist.</p>
-        </div>
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                textAlign: 'center',
+                backgroundColor: '#f5f5f5',
+            }}
+        >
+            <Box sx={{ padding: '2rem', backgroundColor: '#fff', borderRadius: '8px', boxShadow: 3 }}>
+                <Typography variant="h5" gutterBottom>
+                    Something went wrong in the application.
+                </Typography>
+                <Button variant="contained" color="primary" onClick={handleGoHome}>
+                    GO HOME
+                </Button>
+            </Box>
+        </Box>
     );
 };
 
