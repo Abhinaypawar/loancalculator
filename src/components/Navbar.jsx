@@ -30,7 +30,7 @@ const Navbar = () => {
 
   const navItems = [
     { text: "Home", path: "/" },
-    { text: "EXCHANGE RATE(live)", path: "/emi-calculator" },
+    { text: "EXCHANGE RATE(live)", path: "/live-server" },
     { text: "About", path: "/about" },
     { text: "Error Page", path: "/error-page" },
   ];

@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import EmiCalculator from './pages/EmiCalculator';
 import About from './pages/About';
 import ErrorPage from './pages/ErrorPage';
+import LiveData from './pages/LiveData';
 
 function App() {
   const { mode } = useThemeContext();
@@ -20,7 +21,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/emi-calculator" element={<EmiCalculator />} />
+          {/* <Route path="/emi-calculator" element={<EmiCalculator />} /> */}
+          <Route path="/live-server" element={<LiveData/>} />
           <Route path="/about" element={<About />} />
           <Route path="/error-page" element={<ErrorPage />} />
           <Route path="*" element={<ErrorPage />} />

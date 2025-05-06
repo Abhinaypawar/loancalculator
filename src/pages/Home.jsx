@@ -1,17 +1,52 @@
-import { useCurrencyContext } from "../context/CurrencyContext";
-import useEmiCalculator from "../hooks/useEmiCalculator";
+import React, { useState } from "react";
+
 import LoanForm from "../components/LoanForm";
 import EmiBreakdownTable from "../components/EmiBreakdownTable";
+import AmortizationSchedule from "../components/AmortizationSchedule";
+import useExchangeRates from "../hooks/useExchangeRate"; // Custom hook to fetch exchange rates
 
 const Home = () => {
-  const { emi, schedule, calculateEmi } = useEmiCalculator();
+  const { exchangeRates, loading, error } = useExchangeRates();
+  const [currency, setCurrency] = useState("USD");
+  const [emi, setEmi] = useState(null);
+  const [schedule, setSchedule] = useState([]);
+  const [formData, setFormData] = useState(null); // Hold amount, interest, tenure
 
-  const { currency, exchangeRates, setCurrency } = useCurrencyContext();
+  const calculateEmi = ({ amount, interest, tenure }) => {
+    const monthlyRate = interest / 12 / 100;
+    const emiAmount =
+      (amount * monthlyRate * Math.pow(1 + monthlyRate, tenure * 12)) /
+      (Math.pow(1 + monthlyRate, tenure * 12) - 1);
+
+    setEmi(emiAmount);
+    setFormData({ amount, interest, tenure });
+
+    const paymentSchedule = [];
+    let balance = amount;
+
+    for (let month = 1; month <= tenure * 12; month++) {
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = emiAmount - interestPayment;
+      balance -= principalPayment;
+
+      paymentSchedule.push({
+        month,
+        principal: principalPayment,
+        interest: interestPayment,
+        totalPayment: emiAmount,
+        balance: balance < 0 ? 0 : balance,
+      });
+    }
+
+    setSchedule(paymentSchedule);
+  };
 
   const convertedEmi =
-    emi && exchangeRates && currency && exchangeRates[currency]
+    emi && exchangeRates && exchangeRates[currency]
       ? (emi * exchangeRates[currency]).toFixed(2)
       : null;
+
+  const conversionRate = exchangeRates?.[currency] || 1;
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -19,27 +54,72 @@ const Home = () => {
 
       <LoanForm onCalculate={calculateEmi} />
 
-      {emi && (
+      {loading && <p>Loading exchange rates...</p>}
+      {error && <p>{error}</p>}
+
+      {emi !== null && formData && (
         <>
           <div style={{ marginTop: "1rem" }}>
-            <label>Select Currency: </label>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+            <h3>
+              EMI in {currency}: {currency} {convertedEmi}
+            </h3>
+
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              {Object.keys(exchangeRates || {}).map((curr) => (
-                <option key={curr} value={curr}>
-                  {curr}
-                </option>
-              ))}
-            </select>
+              <div>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  style={{
+                    padding: "15px",
+                    border: "1px solid #ccc",
+                    opacity: "0.7",
+                    flex: "1 1 100%",
+                    maxWidth: "200px",
+                  }}
+                >
+                  {exchangeRates &&
+                    Object.keys(exchangeRates).map((curr) => (
+                      <option key={curr} value={curr}>
+                        {curr}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <button
+                onClick={() => {
+                  setEmi(null);
+                  setFormData(null);
+                  setSchedule([]);
+                }}
+                style={{
+                  padding: "15px",
+                  border: "1px solid #ccc",
+                  
+                  color:"purple",
+                  opacity: "0.7",
+                  flex: "1 1 100%",
+                  maxWidth: "150px",
+                  cursor: "pointer",
+                }}
+              >
+                Reset Table
+              </button>
+            </div>
           </div>
 
-          <h3>
-            EMI in {currency}: ₹{convertedEmi}
-          </h3>
-
-          <EmiBreakdownTable schedule={schedule} />
+          <AmortizationSchedule
+            schedule={schedule}
+            currency={currency}
+            conversionRate={conversionRate}
+          />
         </>
       )}
     </div>

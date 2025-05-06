@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import LoanForm from "../components/LoanForm";
-import { useEmiCalculator } from "../hooks/useEmiCalculator";
+import useEmiCalculator from "../hooks/useEmiCalculator";
 import EmiBreakdownTable from "../components/EmiBreakdownTable";
 
 const EmiCalculator = () => {
@@ -27,6 +27,8 @@ const EmiCalculator = () => {
       {loanDetails && (
         <>
           <h2>Monthly EMI: ₹{emi}</h2>
+          <h3>Loan Details</h3>
+          
           <EmiBreakdownTable
             principal={loanDetails.principal}
             rate={loanDetails.rate}

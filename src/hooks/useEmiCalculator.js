@@ -5,23 +5,29 @@ const useEmiCalculator = () => {
   const [schedule, setSchedule] = useState([]);
 
   const calculateEmi = ({ amount, interest, tenure }) => {
-    const monthlyRate = interest / 12 / 100;
+    const principal = parseFloat(amount);
+    const rate = parseFloat(interest);
+    const months = parseInt(tenure) * 12;
+
+    if (!principal || !rate || !months) return;
+
+    const monthlyRate = rate / 12 / 100;
     const emiAmount =
-      (amount * monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
-      (Math.pow(1 + monthlyRate, tenure) - 1);
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+      (Math.pow(1 + monthlyRate, months) - 1);
 
     setEmi(emiAmount);
 
+    let balance = principal;
     const paymentSchedule = [];
-    let balance = amount;
 
-    for (let month = 1; month <= tenure; month++) {
+    for (let i = 1; i <= months; i++) {
       const interestPayment = balance * monthlyRate;
       const principalPayment = emiAmount - interestPayment;
       balance -= principalPayment;
 
       paymentSchedule.push({
-        month,
+        month: i,
         principal: principalPayment.toFixed(2),
         interest: interestPayment.toFixed(2),
         totalPayment: emiAmount.toFixed(2),
@@ -36,4 +42,3 @@ const useEmiCalculator = () => {
 };
 
 export default useEmiCalculator;
-export { useEmiCalculator };
