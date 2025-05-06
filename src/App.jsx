@@ -9,6 +9,7 @@ import EmiCalculator from "./pages/EmiCalculator";
 import About from "./pages/About";
 import ErrorPage from "./pages/ErrorPage";
 import LiveData from "./pages/LiveData";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const { mode } = useThemeContext();
@@ -21,14 +22,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
+    
       {!hideNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/live-server" element={<LiveData />} />
         <Route path="/about" element={<About />} />
         <Route path="/error-page" element={<ErrorPage />} />
-        <Route path="*" element={<ErrorPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </ThemeProvider>
   );

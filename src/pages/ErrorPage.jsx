@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 
 const ErrorPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleGoHome = () => {
     navigate("/");
@@ -17,13 +18,14 @@ const ErrorPage = () => {
         alignItems: "center",
         height: "100vh",
         textAlign: "center",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <Box
         sx={{
           padding: "2rem",
-          backgroundColor: "#fff",
+          backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
           borderRadius: "8px",
           boxShadow: 3,
         }}
